@@ -72,57 +72,43 @@
         </ul>
       </nav>
       <div class="welcome">
-        <h2 class="d-flex">Hai,Admin</h2>
+        <h2 class="d-flex">Hai, Bidan</h2> <!-- Menampilkan nama pengguna -->
         <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
       </div>
     </header>
     <main>
-  <div class="container text-center mt-4">
-    <h1 class="mt-2">Operasional Klinik</h1>
-    <div
-      class="main mt-5 d-flex flex-wrap justify-content-center gap-4"
-    >
-      <div class="card col-12 col-sm-4 col-md-3">
-        <div class="card-body">
-          <a href="#" class="btn btn-danger">
-            <img
-              src="../img/DaftarAntrian.png"
-              alt=""
-              style="max-width: 100px"
-            />
-            <br />
-            <span>Daftar Antrian</span>
-          </a>
+      <div class="container text-center mt-4">
+        <h1 class="mt-2">Operasional Klinik</h1>
+        <div class="main mt-5 d-flex flex-wrap justify-content-center gap-4">
+          <div class="card col-12 col-sm-4 col-md-3">
+            <div class="card-body">
+              <a href="#" class="btn btn-danger">
+                <img src="../img/DaftarAntrian.png" alt="" style="max-width: 100px" />
+                <br />
+                <span>Daftar Antrian</span>
+              </a>
+            </div>
+          </div>
+          <div class="card col-12 col-sm-4 col-md-3">
+            <div class="card-body">
+              <a href="#" class="btn btn-danger">
+                <img src="../img/kelolaKlinik.png" alt="" style="max-width: 100px" />
+                <br />
+                <span>Kelola Klinik</span>
+              </a>
+            </div>
+          </div>
+          <div class="card col-12 col-sm-4 col-md-3">
+            <div class="card-body">
+              <a href="#" class="btn btn-danger">
+                <img src="../img/Transaksi.png" alt="" style="max-width: 100px" />
+                <br />
+                <span>Transaksi</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card col-12 col-sm-4 col-md-3">
-        <div class="card-body">
-          <a href="#" class="btn btn-danger">
-            <img
-              src="../img/kelolaKlinik.png"
-              alt=""
-              style="max-width: 100px"
-            />
-            <br />
-            <span>Kelola Klinik</span>
-          </a>
-        </div>
-      </div>
-      <div class="card col-12 col-sm-4 col-md-3">
-        <div class="card-body">
-          <a href="#" class="btn btn-danger">
-            <img
-              src="../img/Transaksi.png"
-              alt=""
-              style="max-width: 100px"
-            />
-            <br />
-            <span>Transaksi</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+    </main>
   </body>
 </html>
