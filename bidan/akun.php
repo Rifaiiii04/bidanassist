@@ -1,3 +1,16 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login.php');
+    exit;
+}
+
+include '../koneksi.php';
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT * FROM account WHERE id = '$user_id'";
+$result = mysqli_query($conn, $sql);
+$user = mysqli_fetch_assoc($result);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +78,7 @@
           style="list-style: none; font-weight: bold"
         >
           <li>
-            <a href="index.php" class="text-decoration-none" style="color: black"
+            <a href="dashboard.php" class="text-decoration-none" style="color: black"
               >Beranda</a
             >
           </li>
@@ -90,28 +103,36 @@
     <div class="content mt-4">
       <!-- Operational Hours Section -->
       <div class="operational-hours">
-        <table>
-            <tr>
-                <td>Nama :  </td>
-                <td>Admin 1</td>
-            </tr>
-            <tr>
-                <td>Nama Lengkap :  </td>
-                <td>Admin 1</td>
-            </tr>
-            <tr>
-                <td>email : </td>
-                <td>admin123@gmail.com</td>
-            </tr>
-            <tr>
-                <td>No Telp : </td>
-                <td>08123456789</td>
-            </tr>
-        </table>
-        <form action="" class="d-flex justify-content-center align-items-center mt-5">
-            <a href="..//role_selection.html"><button type="button" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin keluar ? ')">Log Out</button></a>
-        </form>
-      </div>
+    <table>
+        <tr>
+            <td>Nama Depan: </td>
+            <td><?php echo htmlspecialchars($user['nama_depan']); ?></td>
+        </tr>
+        <tr>
+            <td>Nama Lengkap: </td>
+            <td><?php echo htmlspecialchars($user['nama_lengkap']); ?></td>
+        </tr>
+        <tr>
+            <td>Email: </td>
+            <td><?php echo htmlspecialchars($user['email']); ?></td>
+        </tr>
+        <tr>
+            <td>No Telp: </td>
+            <td><?php echo htmlspecialchars($user['notelp']); ?></td>
+        </tr>
+        <tr>
+            <td>Alamat: </td>
+            <td><?php echo htmlspecialchars($user['alamat']); ?></td>
+        </tr>
+        <tr>
+            <td>Umur: </td>
+            <td><?php echo htmlspecialchars($user['umur']); ?></td>
+        </tr>
+    </table>
+    <form action="logout.php" class="d-flex justify-content-center align-items-center mt-5">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin keluar?')">Log Out</button>
+    </form>
+</div>
     </div>
 </body>
 </html>

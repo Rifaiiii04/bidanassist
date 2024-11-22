@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
+    header('Location: ../login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -72,9 +79,9 @@
         </ul>
       </nav>
       <div class="welcome">
-        <h2 class="d-flex">Hai, Bidan</h2> <!-- Menampilkan nama pengguna -->
-        <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
-      </div>
+    <h2 class="d-flex">Hai, <?php echo htmlspecialchars($_SESSION['nama_depan']); ?></h2>
+    <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
+</div>
     </header>
     <main>
       <div class="container text-center mt-4">

@@ -9,6 +9,7 @@
 <body style="background-color: #99b3f6">
 <div class="d-flex justify-content-center align-items-center">
     <div class="container d-flex flex-column align-items-center" style="background-color: #c2d1fa; border-radius: 16px; height: 75vh; width: 80%; margin-top: 10vh; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+            <img src="img/bidanassist.png" alt="" style="width: 250px; position:relative; top:10vh;">
         <h1 class="mt-5" style="font-weight: bold; font-size: 24px">Log in Sebagai :</h1>
         <form action="" style="width: 300px">
             <a href="login.php?role=bidan" style="text-decoration: none; color: white;">

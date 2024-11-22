@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
+    header('Location: ../login.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,7 +84,7 @@
           style="list-style: none; font-weight: bold"
         >
           <li>
-            <a href="index.php" class="text-decoration-none" style="color: black"
+            <a href="dashboard.php" class="text-decoration-none" style="color: black"
               >Beranda</a
             >
           </li>
@@ -94,9 +101,9 @@
         </ul>
       </nav>
       <div class="welcome">
-        <h2 class="d-flex">Hai,Admin</h2>
-        <h3 class="d-flex">Silahkan isi Jadwal dan Kontak</h3>
-      </div>
+    <h2 class="d-flex">Hai, <?php echo htmlspecialchars($_SESSION['nama_depan']); ?></h2>
+    <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
+</div>
     </header>
 
     <!-- Main Content -->
