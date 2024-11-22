@@ -105,10 +105,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
     <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
 </div>
     </header>
-
-    <!-- Main Content -->
     <div class="content mt-4">
-      <!-- Operational Hours Section -->
       <div class="operational-hours">
         <h3>Jam Operasional</h3>
         <div>

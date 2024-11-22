@@ -3,7 +3,6 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'koneksi.php';
 
-    // Ambil data dari form
     $nama_depan = mysqli_real_escape_string($conn, $_POST['nama_depan']);
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -13,12 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alamat = mysqli_real_escape_string($conn, $_POST['alamat']);
     $umur = mysqli_real_escape_string($conn, $_POST['umur']);
 
-    // Check if email already exists
     $check_email = mysqli_query($conn, "SELECT email FROM account WHERE email = '$email'");
     if (mysqli_num_rows($check_email) > 0) {
         $error = "Email sudah terdaftar!";
     } else {
-        // Query untuk insert data
+
         $sql = "INSERT INTO account (nama_depan, nama_lengkap, email, password, notelp, role, alamat, umur) 
                 VALUES ('$nama_depan', '$nama_lengkap', '$email', '$password', '$notelp', '$role', '$alamat', '$umur')";
 

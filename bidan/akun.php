@@ -98,10 +98,7 @@ $user = mysqli_fetch_assoc($result);
         <div class="" style="border:3px solid black;border-radius: 50%; background-color:#99b336"><img src="..//img/bidanassist.png" alt="Profile" style="width: 90px;"></div>
       </div>
     </header>
-
-    <!-- Main Content -->
     <div class="content mt-4">
-      <!-- Operational Hours Section -->
       <div class="operational-hours">
     <table>
         <tr>
