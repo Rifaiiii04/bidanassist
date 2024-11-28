@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($user['role'] == 'bidan') {
                 header('Location: bidan/dashboard.php');
             } else {
-                header('Location: dashboard_pasien.php');
+                header('Location: pasien/dashboard_pasien.php');
             }
             exit;
         } else {

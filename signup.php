@@ -20,12 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO account (nama_depan, nama_lengkap, email, password, notelp, role, alamat, umur) 
                 VALUES ('$nama_depan', '$nama_lengkap', '$email', '$password', '$notelp', '$role', '$alamat', '$umur')";
 
-        if (mysqli_query($conn, $sql)) {
-            header('Location: login.php');
-            exit;
-        } else {
-            $error = "Gagal mendaftar: " . mysqli_error($conn);
-        }
+if (mysqli_query($conn, $sql)) {
+    echo "<script>
+            alert('Pendaftaran berhasil!');
+            window.location.href = 'login.php';
+          </script>";
+    exit;
+} else {
+    $error = "Gagal mendaftar: " . mysqli_error($conn);
+    echo "<script>alert('" . addslashes($error) . "');</script>";
+}
+
     }
 }
 ?>

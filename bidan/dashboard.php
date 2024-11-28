@@ -79,7 +79,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
         </ul>
       </nav>
       <div class="welcome">
-    <h2 class="d-flex">Hai, <?php echo htmlspecialchars($_SESSION['nama_depan']); ?></h2>
+    <h2 class="d-flex">Hai,Bidan <?php echo htmlspecialchars($_SESSION['nama_depan']); ?></h2>
     <h3 class="d-flex">Selamat Datang di BIDAN ASSIST</h3>
 </div>
     </header>

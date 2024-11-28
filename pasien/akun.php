@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
     header('Location: ../login.php');
     exit;
 }
@@ -16,7 +16,7 @@ $user = mysqli_fetch_assoc($result);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kontak</title>
+    <title>Kontak Pasien</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -27,14 +27,6 @@ $user = mysqli_fetch_assoc($result);
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
-    ></script>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
     <style>
        @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap");
@@ -73,67 +65,54 @@ $user = mysqli_fetch_assoc($result);
 </head>
 <body>
 <header style="background-color: #99b3f6; height: 170px; border-radius: 0 0 20px 20px;">
-      <div>
-        <img src="#" alt="" />
-      </div>
-      <nav style="margin-right: 15vh">
-        <ul
-          class="d-flex flex gap-5 justify-content-center"
-          style="list-style: none; font-weight: bold"
-        >
-          <li>
-            <a href="dashboard.php" class="text-decoration-none" style="color: black"
-              >Beranda</a
-            >
-          </li>
-          <li>
-            <a href="kontak.php" class="text-decoration-none" style="color: black"
-              >Kontak</a
-            >
-          </li>
-          <li>
-            <a href="akun.php" class="text-decoration-none" style="color: black"
-              >Akun</a
-            >
-          </li>
+    <nav style="margin-right: 15vh">
+        <ul class="d-flex flex gap-5 justify-content-center" style="list-style: none; font-weight: bold">
+            <li>
+                <a href="dashboard_pasien.php" class="text-decoration-none" style="color: black">Beranda</a>
+            </li>
+            <li>
+                <a href="kontak.php" class="text-decoration-none" style="color: black">Kontak</a>
+            </li>
+            <li>
+                <a href="akun.php" class="text-decoration-none" style="color: black">Akun</a>
+            </li>
         </ul>
-      </nav>
-      <div class="profile d-flex justify-content-center align-items-center">
-        <div class="" style="border:3px solid black;border-radius: 50%; background-color:#99b336"><img src="..//img/bidanassist.png" alt="Profile" style="width: 90px;"></div>
-      </div>
-    </header>
-    <div class="content mt-4">
-      <div class="operational-hours">
+    </nav>
+    <div class="profile"><br><br>
+        <h2>Halo, <?php echo htmlspecialchars($user['nama_depan']); ?>!</h2>
+    </div>
+</header>
+<main class="content">
+    <h3>Informasi Pasien</h3>
     <table>
         <tr>
-            <td>Nama Depan: </td>
+            <td><strong>Nama Depan:</strong></td>
             <td><?php echo htmlspecialchars($user['nama_depan']); ?></td>
         </tr>
         <tr>
-            <td>Nama Lengkap: </td>
+            <td><strong>Nama Lengkap:</strong></td>
             <td><?php echo htmlspecialchars($user['nama_lengkap']); ?></td>
         </tr>
         <tr>
-            <td>Email: </td>
+            <td><strong>Email:</strong></td>
             <td><?php echo htmlspecialchars($user['email']); ?></td>
         </tr>
         <tr>
-            <td>No Telp: </td>
+            <td><strong>No Telp:</strong></td>
             <td><?php echo htmlspecialchars($user['notelp']); ?></td>
         </tr>
         <tr>
-            <td>Alamat: </td>
+            <td><strong>Alamat:</strong></td>
             <td><?php echo htmlspecialchars($user['alamat']); ?></td>
         </tr>
         <tr>
-            <td>Umur: </td>
+            <td><strong>Umur:</strong></td>
             <td><?php echo htmlspecialchars($user['umur']); ?> Tahun</td>
         </tr>
     </table>
-    <form action="logout.php" class="d-flex justify-content-center align-items-center mt-5">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin keluar?')">Log Out</button>
+    <form action="logout.php" method="post">
+        <button type="submit" class="btn btn-danger btn-logout" onclick="return confirm('Apakah Anda yakin ingin keluar?')">Log Out</button>
     </form>
-</div>
-    </div>
+</main>
 </body>
 </html>
