@@ -80,7 +80,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
           <p class="mt-3">Anda Belum Melakukan Riwayat Pemeriksaan</p>
         </div>
         <div class="d-flex justify-content-center gap-3 mt-4">
-          <a href="#" class="btn btn-success px-4 py-2">Tambah Data Pasien</a>
+          <a href="tambah_data_p.php" class="btn btn-success px-4 py-2">Tambah Data Pasien</a>
           <a href="#" class="btn btn-danger px-4 py-2">Pendaftaran</a>
           <a href="#" class="btn btn-success px-4 py-2">Lihat Data Pasien</a>
         </div>
