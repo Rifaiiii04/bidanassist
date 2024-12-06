@@ -79,6 +79,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
           <label for="hubungan" class="form-label">Hubungan Dengan Pemilik Akun</label>
           <select class="form-select form-control" id="hubungan" name="hubungan" required>
             <option value="" selected disabled>Pilih Hubungan</option>
+            <option value="Diri Sendiri">Diri Sendiri</option>
             <option value="Ibu">Ibu</option>
             <option value="Anak">Anak</option>
             <option value="Ayah">Ayah</option>
