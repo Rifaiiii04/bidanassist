@@ -7,9 +7,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
 
 include '../koneksi.php';
 
+// Ambil data pasien dari sesi
+$id_pasien = $_SESSION['user_id'];
+
 // Proses form pendaftaran
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ambil data dari form
     $tanggal_pemeriksaan = $_POST['tanggal_pemeriksaan'];
     $tinggi_badan = $_POST['tinggi_badan'];
     $berat_badan = $_POST['berat_badan'];
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query = "INSERT INTO pendaftaran (id_pasien, tanggal_pemeriksaan, tinggi_badan, berat_badan, suhu, tekanan_darah, keluhan) 
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("issddss", $_SESSION['user_id'], $tanggal_pemeriksaan, $tinggi_badan, $berat_badan, $suhu, $tekanan_darah, $keluhan);
+        $stmt->bind_param("issddss", $id_pasien, $tanggal_pemeriksaan, $tinggi_badan, $berat_badan, $suhu, $tekanan_darah, $keluhan);
 
         if ($stmt->execute()) {
             // Jika berhasil, arahkan ke dashboard pasien
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pendaftaran Pasien</title>
+    <title>Pendaftaran Pemeriksaan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <style>

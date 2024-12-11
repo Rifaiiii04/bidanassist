@@ -95,7 +95,8 @@ $result = $stmt->get_result();
                                     <td><?php echo htmlspecialchars($row['suhu']); ?> °C</td>
                                     <td><?php echo htmlspecialchars($row['tekanan_darah']); ?></td>
                                     <td><?php echo htmlspecialchars($row['keluhan']); ?></td>
-                                    <td><a href='cek_status.php?id=" . $row['id_pendaftaran'] . "' class='btn btn-info btn-sm'>Cek Status</a>
+                                    <td>
+                                    <a href="cek_status.php?id=<?php echo htmlspecialchars($row['id']); ?>" class="btn btn-info btn-sm">Cek Status</a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
