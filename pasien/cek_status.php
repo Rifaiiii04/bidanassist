@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
     header('Location: ../login.php');
     exit;
@@ -8,31 +7,30 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'pasien') {
 
 include '../koneksi.php';
 
-// Ambil user_id dari session
-$user_id = $_SESSION['user_id'];
+// Ambil ID dari parameter URL
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    die('ID tidak valid!');
+}
 
-// Query untuk mengambil informasi pasien dan status pendaftaran
-$query = "SELECT dp.nama, dp.umur, dp.no_telp, dp.alamat, p.tanggal_pemeriksaan, 
-          p.tinggi_badan, p.berat_badan, p.suhu, p.tekanan_darah, p.keluhan, p.id AS no_antrian, 
-          CASE 
-              WHEN p.tanggal_pemeriksaan IS NULL THEN 'Belum Pemeriksaan'
-              ELSE 'Dalam Pemeriksaan'
-          END AS status
-          FROM data_pasien dp
-          LEFT JOIN pendaftaran p ON dp.id = p.id_pasien
-          WHERE dp.user_id = ?
-          ORDER BY p.created_at DESC LIMIT 1";
+$id = intval($_GET['id']); // Validasi ID untuk menghindari SQL Injection
 
+// Query untuk mengambil data dari tabel `pendaftaran`
+$query = "SELECT id, nama_pasien, tanggal_pemeriksaan, tinggi_badan, berat_badan, suhu, tekanan_darah, keluhan, status
+          FROM pendaftaran 
+          WHERE id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Cek apakah data ditemukan
 if ($result->num_rows > 0) {
     $data = $result->fetch_assoc();
 } else {
-    $error_message = "Tidak ada data pendaftaran ditemukan.";
+    die('Data tidak ditemukan!');
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -40,122 +38,121 @@ if ($result->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Pemeriksaan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cek Status</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #d9e7ff;
         }
-        .header {
-            background-color: #99b3f6;
-            height: 100px;
-            border-radius: 0 0 20px 20px;
-            position: relative;
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        .btn-back {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            color: black;
-            background-color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        h1 {
+            text-align: center;
+            background-color: #8cbfff;
+            color: white;
+            padding: 15px;
+            margin: 0;
         }
-        .btn-back:hover {
-            background-color: #dddddd;
-        }
-        .status-box {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-        .status-box .card {
+        .details {
             padding: 20px;
-            font-size: 18px;
+        }
+        .details p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+        }
+        .details p span {
             font-weight: bold;
-            border-radius: 10px;
+        }
+        .status {
+            padding: 20px;
+            background-color: #f4f4f9;
             text-align: center;
         }
-        .card-green {
-            background-color: #d4edda;
-            color: #155724;
+        .status p {
+            font-size: 18px;
+            color: #333;
         }
-        .card-red {
-            background-color: #f8d7da;
-            color: #721c24;
+        .status span {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+        .status .belum {
+            background-color: #ff6b6b;
+        }
+        .status .sudah {
+            background-color: #6bcf6b;
+        }
+        .antrian {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+            color: #333;
+        }
+        .antrian span {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #d4f8d4;
+            border: 1px solid #6bcf6b;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .button-back {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 80%;
+            text-transform: uppercase;
+        }
+        .button-back:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Detail Pemeriksaan</h1>
 
-<div class="header">
-    <a href="javascript:history.back()" class="btn-back">&larr;</a>
-    <div class="d-flex justify-content-center">
-        <h2 class="text-center">Status Pemeriksaan</h2>
+        <!-- Nomor Antrian -->
+        <div class="antrian">
+            <p>No Antrian: <span><?php echo htmlspecialchars($data['id']); ?></span></p>
+        </div>
+
+        <div class="details">
+            <p><span>Nama:</span> <?php echo htmlspecialchars($data['nama_pasien'] ?: 'Tidak tersedia'); ?></p>
+            <p><span>Tanggal Pemeriksaan:</span> <?php echo htmlspecialchars($data['tanggal_pemeriksaan'] ?: 'Tidak tersedia'); ?></p>
+            <p><span>Tinggi Badan:</span> <?php echo htmlspecialchars($data['tinggi_badan'] ?: 'Tidak tersedia'); ?> cm</p>
+            <p><span>Berat Badan:</span> <?php echo htmlspecialchars($data['berat_badan'] ?: 'Tidak tersedia'); ?> kg</p>
+            <p><span>Suhu:</span> <?php echo htmlspecialchars($data['suhu'] ?: 'Tidak tersedia'); ?> &deg;C</p>
+            <p><span>Tekanan Darah:</span> <?php echo htmlspecialchars($data['tekanan_darah'] ?: 'Tidak tersedia'); ?></p>
+            <p><span>Keluhan:</span> <?php echo htmlspecialchars($data['keluhan'] ?: 'Tidak tersedia'); ?></p>
+        </div>
+
+        <div class="status">
+            <p><span class="<?php echo $data['status'] === 'Belum Diperiksa' ? 'belum' : 'sudah'; ?>">
+                <?php echo htmlspecialchars($data['status'] ?: 'Belum Diperiksa'); ?>
+            </span></p>
+        </div>
+
+        <a href="dashboard_pasien.php" class="button-back">Kembali ke Dashboard</a>
     </div>
-</div>
-
-<div class="container mt-5">
-    <?php if (isset($error_message)): ?>
-        <div class="alert alert-danger text-center" role="alert">
-            <?php echo $error_message; ?>
-        </div>
-    <?php else: ?>
-        <div class="row mb-3">
-            <div class="col-6">Nama</div>
-            <div class="col-6">: <?php echo $data['nama']; ?></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Umur</div>
-            <div class="col-6">: <?php echo $data['umur']; ?> Tahun</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">No Telp</div>
-            <div class="col-6">: <?php echo $data['no_telp']; ?></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Alamat</div>
-            <div class="col-6">: <?php echo $data['alamat']; ?></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Tanggal Pemeriksaan</div>
-            <div class="col-6">: <?php echo $data['tanggal_pemeriksaan']; ?></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Tinggi Badan</div>
-            <div class="col-6">: <?php echo $data['tinggi_badan']; ?> cm</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Berat Badan</div>
-            <div class="col-6">: <?php echo $data['berat_badan']; ?> Kg</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Suhu</div>
-            <div class="col-6">: <?php echo $data['suhu']; ?> Celsius</div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Tekanan Darah</div>
-            <div class="col-6">: <?php echo $data['tekanan_darah']; ?></div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-6">Keluhan</div>
-            <div class="col-6">: <?php echo $data['keluhan']; ?></div>
-        </div>
-        <div class="status-box">
-            <div class="card card-green">No Antrian <?php echo $data['no_antrian']; ?></div>
-            <div class="card card-red">Status: <?php echo $data['status']; ?></div>
-        </div>
-    <?php endif; ?>
-</div>
-
 </body>
 </html>

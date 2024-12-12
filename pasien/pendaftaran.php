@@ -12,6 +12,7 @@ $id_pasien = $_SESSION['user_id'];
 
 // Proses form pendaftaran
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nama_pasien = $_POST['nama_pasien'];
     $tanggal_pemeriksaan = $_POST['tanggal_pemeriksaan'];
     $tinggi_badan = $_POST['tinggi_badan'];
     $berat_badan = $_POST['berat_badan'];
@@ -20,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $keluhan = $_POST['keluhan'];
 
     // Periksa jika data tidak kosong
-    if (!empty($tanggal_pemeriksaan) && !empty($tinggi_badan) && !empty($berat_badan) && !empty($suhu) && !empty($tekanan_darah) && !empty($keluhan)) {
+    if (!empty($nama_pasien) && !empty($tanggal_pemeriksaan) && !empty($tinggi_badan) && !empty($berat_badan) && !empty($suhu) && !empty($tekanan_darah) && !empty($keluhan)) {
         // Insert data ke tabel pendaftaran
-        $query = "INSERT INTO pendaftaran (id_pasien, tanggal_pemeriksaan, tinggi_badan, berat_badan, suhu, tekanan_darah, keluhan) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO pendaftaran (id_pasien, nama_pasien, tanggal_pemeriksaan, tinggi_badan, berat_badan, suhu, tekanan_darah, keluhan) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("issddss", $id_pasien, $tanggal_pemeriksaan, $tinggi_badan, $berat_badan, $suhu, $tekanan_darah, $keluhan);
+        $stmt->bind_param("issddsss", $id_pasien, $nama_pasien, $tanggal_pemeriksaan, $tinggi_badan, $berat_badan, $suhu, $tekanan_darah, $keluhan);
 
         if ($stmt->execute()) {
             // Jika berhasil, arahkan ke dashboard pasien
@@ -111,6 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form action="pendaftaran.php" method="POST">
+            <div class="mb-3">
+                <label for="nama_pasien" class="form-label">Nama Pasien</label>
+                <input type="text" class="form-control" id="nama_pasien" name="nama_pasien" required>
+            </div>
             <div class="mb-3">
                 <label for="tanggal_pemeriksaan" class="form-label">Tanggal Pemeriksaan</label>
                 <input type="date" class="form-control" id="tanggal_pemeriksaan" name="tanggal_pemeriksaan" required>
