@@ -107,7 +107,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
           </div>
           <div class="card col-12 col-sm-4 col-md-3">
             <div class="card-body">
-              <a href="#" class="btn btn-danger">
+              <a href="detail_transaksi.php" class="btn btn-danger">
                 <img src="../img/Transaksi.png" alt="" style="max-width: 100px" />
                 <br />
                 <span>Transaksi</span>

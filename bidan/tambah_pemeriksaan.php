@@ -5,16 +5,29 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
     exit;
 }
 
-// Include connection file
 include "../koneksi.php";
 
-// Fetch pemeriksaan data
+// Ambil data pemeriksaan
 $pemeriksaanQuery = "SELECT id_pemeriksaan, nama_pemeriksaan, harga_periksa FROM pemeriksaan";
 $pemeriksaanResult = $conn->query($pemeriksaanQuery);
 
-// Fetch obat data
+// Ambil data obat
 $obatQuery = "SELECT ID_obat, nama_obat, harga_obat, jenis_obat FROM obat";
 $obatResult = $conn->query($obatQuery);
+
+// Proses form submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Menyimpan data yang dipilih ke session untuk diteruskan ke halaman detail transaksi
+    $_SESSION['pemeriksaan'] = $_POST['pemeriksaan'] ?? [];
+    $_SESSION['obat'] = $_POST['obat'] ?? [];
+    $_SESSION['dosis'] = $_POST['dosis'] ?? [];
+    $_SESSION['instruksi'] = $_POST['instruksi'] ?? [];
+    $_SESSION['tanggal_pemeriksaan'] = date('Y-m-d'); // Tanggal pemeriksaan saat ini
+    
+    // Arahkan ke halaman detail transaksi
+    header('Location: detail_transaksi.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +120,7 @@ $obatResult = $conn->query($obatQuery);
         Kembali ke Daftar Antrian
     </a>
     <h1>Pemeriksaan dan Obat</h1>
-    <form method="post" action="resep.php">
+    <form method="post" action="tambah_pemeriksaan.php">
         <!-- Pemeriksaan Section -->
         <div class="section-title">Jenis Pemeriksaan</div>
         <div class="form-section">
@@ -125,13 +138,31 @@ $obatResult = $conn->query($obatQuery);
         <!-- Obat Section -->
         <div class="section-title">Pilih Obat</div>
         <div class="form-section">
-            <?php while ($row = $obatResult->fetch_assoc()): ?>
+            <?php 
+            // Reset pointer to the beginning of the result set to loop again for obat
+            $obatResult->data_seek(0);
+            while ($row = $obatResult->fetch_assoc()): ?>
                 <div class="item">
                     <span>
                         <input type="checkbox" name="obat[]" value="<?php echo $row['ID_obat']; ?>">
                         <?php echo $row['nama_obat']; ?> (<?php echo $row['jenis_obat']; ?>)
                     </span>
                     <span>Rp <?php echo number_format($row['harga_obat'], 0, ',', '.'); ?></span>
+                </div>
+            <?php endwhile; ?>
+        </div>
+
+        <!-- Dosis dan Instruksi Section -->
+        <div class="section-title">Instruksi dan Dosis</div>
+        <div class="form-section">
+            <?php 
+            // Reset pointer to the beginning of the result set again
+            $obatResult->data_seek(0);
+            while ($row = $obatResult->fetch_assoc()): ?>
+                <div class="item">
+                    <span><?php echo $row['nama_obat']; ?></span>
+                    <input type="text" name="dosis[<?php echo $row['ID_obat']; ?>]" placeholder="Masukkan dosis">
+                    <input type="text" name="instruksi[<?php echo $row['ID_obat']; ?>]" placeholder="Masukkan instruksi">
                 </div>
             <?php endwhile; ?>
         </div>
