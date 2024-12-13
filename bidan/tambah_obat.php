@@ -8,12 +8,13 @@ include '../koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama_obat = $_POST['nama_obat'];
+    $jenis_obat = $_POST['jenis_obat'];
     $jumlah = $_POST['jumlah'];
     $harga_obat = $_POST['harga_obat'];
     $subtotal_obat = $jumlah * $harga_obat;
 
-    $query = "INSERT INTO obat (nama_obat, jumlah, harga_obat, subtotal_obat) 
-              VALUES ('$nama_obat', $jumlah, $harga_obat, $subtotal_obat)";
+    $query = "INSERT INTO obat (nama_obat, jenis_obat, jumlah, harga_obat, subtotal_obat) 
+              VALUES ('$nama_obat', '$jenis_obat', $jumlah, $harga_obat, $subtotal_obat)";
     if (mysqli_query($conn, $query)) {
         header('Location: manajemen_obat.php');
         exit;
@@ -81,6 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-3">
                 <label for="nama_obat" class="form-label">Nama Obat:</label>
                 <input type="text" name="nama_obat" id="nama_obat" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="jenis_obat" class="form-label">Jenis Obat:</label>
+                <select name="jenis_obat" id="jenis_obat" class="form-control" required>
+                    <option value="Tablet">Tablet</option>
+                    <option value="Sirup">Sirup</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="jumlah" class="form-label">Jumlah:</label>

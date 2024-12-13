@@ -120,7 +120,7 @@ $result = $stmt->get_result();
                     <td><?php echo htmlspecialchars($row['suhu']); ?> &deg;C</td>
                     <td><?php echo htmlspecialchars($row['tekanan_darah']); ?></td>
                     <td>
-                    <a href="'#'" class="btn-cek-status">Tambah Pemeriksaan</a>
+                    <a href="tambah_pemeriksaan.php" class="btn-cek-status">Tambah Pemeriksaan</a>
                     </td>
 
                 </tr>
