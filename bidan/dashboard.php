@@ -98,7 +98,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
           </div>
           <div class="card col-12 col-sm-4 col-md-3">
             <div class="card-body">
-              <a href="#" class="btn btn-danger">
+              <a href="kelola.php" class="btn btn-danger">
                 <img src="../img/kelolaKlinik.png" alt="" style="max-width: 100px" />
                 <br />
                 <span>Kelola Klinik</span>
