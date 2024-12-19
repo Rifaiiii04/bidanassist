@@ -136,7 +136,7 @@ $total_bayar = $total_harga_periksa + $total_harga_obat;
             <span><strong>Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?></strong></span>
         </div>
     </div>
-    <a href="dashboard.php" class="back-link">Kembali ke Dashboard</a>
+    <a href="daftar_transaksi.php" class="btn btn-primary">Kembali</a>
 </div>
 
 </body>

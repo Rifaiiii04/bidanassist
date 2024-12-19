@@ -1,23 +1,38 @@
-<!-- <?php
-include "../koneksi.php";
-
-// Fetch transactions with patient details from pendaftaran
-$query = "
-    SELECT t.ID_transaksi, p.nama_pasien, t.tanggal_transaksi, t.status_pembayaran
-    FROM transaksi t
-    JOIN pendaftaran p ON t.id_pendaftaran = p.id
-    ORDER BY t.tanggal_transaksi DESC
-";
-
-$result = $conn->query($query);
-
-if ($result === false) {
-    // Output the error message if the query fails
-    echo "Error: " . $conn->error;
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
+    header('Location: ../login.php');
+    exit;
 }
 
-?>
+include "../koneksi.php";
 
+// Inisialisasi variabel untuk pencarian
+$search = $_GET['search'] ?? '';
+$query = "SELECT id, nama_pasien, tanggal_pemeriksaan, status 
+          FROM pendaftaran 
+          WHERE nama_pasien LIKE ? OR tanggal_pemeriksaan LIKE ?";
+
+$stmt = $conn->prepare($query);
+$searchTerm = '%' . $search . '%';
+$stmt->bind_param("ss", $searchTerm, $searchTerm);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Fungsi untuk memperbarui status transaksi
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
+    $id = $_POST['id'];
+    $status = $_POST['status'];
+    $updateQuery = "UPDATE pendaftaran SET status = ? WHERE id = ?";
+    $stmtUpdate = $conn->prepare($updateQuery);
+    $stmtUpdate->bind_param("si", $status, $id);
+    $stmtUpdate->execute();
+
+    // Refresh halaman setelah update
+    header("Location: daftar_transaksi.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +40,6 @@ if ($result === false) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Transaksi</title>
     <style>
-        /* Styling for the page */
         body {
             font-family: Arial, sans-serif;
             background-color: #f3f4f6;
@@ -33,7 +47,7 @@ if ($result === false) {
             padding: 0;
         }
         .container {
-            width: 70%;
+            width: 80%;
             margin: 30px auto;
             padding: 20px;
             background-color: #ffffff;
@@ -44,41 +58,116 @@ if ($result === false) {
             text-align: center;
             color: #333;
         }
-        .form-section {
-            margin-bottom: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        th, td {
             padding: 10px;
             border: 1px solid #ececec;
-            margin-bottom: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f9fafb;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-lunas {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-belum-lunas {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-detail {
+            background-color: #2196F3;
+            color: white;
+        }
+        .search-form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-search {
+            padding: 8px 15px;
+            border: none;
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Daftar Transaksi</h1>
 
-    <div class="form-section">
+    <form class="search-form" method="GET" action="daftar_transaksi.php">
+        <input type="text" name="search" class="search-input" placeholder="Cari nama pasien atau tanggal (YYYY-MM-DD)" value="<?php echo htmlspecialchars($search); ?>">
+        <button type="submit" class="btn-search">Cari</button>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Pasien</th>
+            <th>Tanggal Pendaftaran</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody>
         <?php if ($result->num_rows > 0): ?>
+            <?php $no = 1; ?>
             <?php while ($row = $result->fetch_assoc()): ?>
-                <div class="item">
-                    <span><?php echo $row['nama_pasien']; ?></span>
-                    <span><?php echo $row['tanggal_transaksi']; ?></span>
-                    <span><?php echo $row['status_pembayaran']; ?></span>
-                    <a href="detail_transaksi.php?id=<?php echo $row['ID_transaksi']; ?>">Detail</a>
-                </div>
+                <tr>
+                    <td><?php echo $no++; ?></td>
+                    <td><?php echo htmlspecialchars($row['nama_pasien']); ?></td>
+                    <td><?php echo date('d-m-Y', strtotime($row['tanggal_pemeriksaan'])); ?></td>
+                    <td><?php echo $row['status'] ?? 'Belum Lunas'; ?></td>
+                    <td>
+                        <div class="action-buttons">
+                            <form method="POST">
+                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                <input type="hidden" name="status" value="Lunas">
+                                <button type="submit" name="update_status" class="btn btn-lunas">Lunas</button>
+                            </form>
+                            <form method="POST">
+                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                <input type="hidden" name="status" value="Belum Lunas">
+                                <button type="submit" name="update_status" class="btn btn-belum-lunas">Belum Lunas</button>
+                            </form>
+                            <a href="detail_transaksi.php?id=<?php echo $row['id']; ?>" class="btn btn-detail">Detail</a>
+                        </div>
+                    </td>
+                </tr>
             <?php endwhile; ?>
         <?php else: ?>
-            <p>No transactions found.</p>
+            <tr>
+                <td colspan="5">Tidak ada data transaksi</td>
+            </tr>
         <?php endif; ?>
-    </div>
-
+        </tbody>
+    </table>
+    <a href="dashboard.php" class="btn btn-primary">Kembali ke Dashboard</a>
 </div>
-
 </body>
-</html> -->
+</html>
