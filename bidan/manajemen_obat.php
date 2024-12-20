@@ -57,6 +57,13 @@ $result = mysqli_query($conn, $query);
         table th {
             background-color: #f4f4f4;
         }
+        .action-buttons a {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
         .add-button {
             background-color: #a3f9a2;
             border: none;
@@ -70,6 +77,20 @@ $result = mysqli_query($conn, $query);
         }
         .add-button:hover {
             background-color: #89e38a;
+        }
+        .edit-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        .delete-button:hover {
+            background-color: #cc0000;
         }
     </style>
 </head>
@@ -86,17 +107,24 @@ $result = mysqli_query($conn, $query);
             <tr>
                 <th>ID Obat</th>
                 <th>Nama Obat</th>
+                <th>Jenis</th>
                 <th>Jumlah</th>
                 <th>Harga Obat</th>
                 <th>Subtotal</th>
+                <th>Aksi</th>
             </tr>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <tr>
                 <td><?= $row['ID_obat'] ?></td>
                 <td><?= $row['nama_obat'] ?></td>
+                <td><?= $row['jenis_obat'] ?></td>
                 <td><?= $row['jumlah'] ?></td>
                 <td><?= $row['harga_obat'] ?></td>
                 <td><?= $row['subtotal_obat'] ?></td>
+                <td class="action-buttons">
+                    <a href="edit_obat.php?id=<?= $row['ID_obat'] ?>" class="edit-button">Edit</a>
+                    <a href="hapus_obat.php?id=<?= $row['ID_obat'] ?>" class="delete-button" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
+                </td>
             </tr>
             <?php endwhile; ?>
         </table>

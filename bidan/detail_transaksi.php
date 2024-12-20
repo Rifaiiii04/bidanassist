@@ -84,7 +84,26 @@ $total_bayar = $total_harga_periksa + $total_harga_obat;
             margin-bottom: 10px;
             border-radius: 5px;
         }
+        .btn-print {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
     </style>
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
 </head>
 <body>
 
@@ -136,7 +155,9 @@ $total_bayar = $total_harga_periksa + $total_harga_obat;
             <span><strong>Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?></strong></span>
         </div>
     </div>
+
     <a href="daftar_transaksi.php" class="btn btn-primary">Kembali</a>
+    <a href="javascript:void(0)" class="btn-print" onclick="printPage()">Cetak</a>
 </div>
 
 </body>
