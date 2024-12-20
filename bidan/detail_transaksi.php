@@ -7,14 +7,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'bidan') {
 
 include "../koneksi.php";
 
-// Ambil data dari session
 $pemeriksaan = $_SESSION['pemeriksaan'] ?? [];
 $obat = $_SESSION['obat'] ?? [];
 $dosis = $_SESSION['dosis'] ?? [];
 $instruksi = $_SESSION['instruksi'] ?? [];
 $tanggal_pemeriksaan = $_SESSION['tanggal_pemeriksaan'] ?? date('Y-m-d');
 
-// Mengambil data pemeriksaan
 $total_harga_periksa = 0;
 $nama_pemeriksaan = [];
 foreach ($pemeriksaan as $id) {
@@ -29,7 +27,6 @@ foreach ($pemeriksaan as $id) {
     }
 }
 
-// Mengambil data obat
 $total_harga_obat = 0;
 $nama_obat = [];
 foreach ($obat as $id) {
