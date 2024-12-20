@@ -90,11 +90,11 @@ $conn->close();
             color: white;
             font-weight: bold;
         }
-        .status .belum {
-            background-color: #ff6b6b;
+        .status .belum-lunas {
+            background-color: #f44336;
         }
-        .status .sudah {
-            background-color: #6bcf6b;
+        .status .lunas {
+            background-color: #4CAF50;
         }
         .antrian {
             text-align: center;
@@ -147,8 +147,8 @@ $conn->close();
         </div>
 
         <div class="status">
-            <p><span class="<?php echo $data['status'] === 'Belum Diperiksa' ? 'belum' : 'sudah'; ?>">
-                <?php echo htmlspecialchars($data['status'] ?: 'Belum Diperiksa'); ?>
+            <p><span class="<?php echo strtolower(str_replace(' ', '-', $data['status'])); ?>">
+                <?php echo htmlspecialchars($data['status']); ?>
             </span></p>
         </div>
 
